@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import Spinner from "../layout/Spinner";
 import Repos from "../repos/Repos";
+import GithubContext from "../../context/github/githubContext";
 
-const User = ({ getUser, getUserRepos, loading, repos, user, match }) => {
+const User = ({ match }) => {
+  const { getUser, loading, user, getUserRepos, repos } = useContext(GithubContext);
   useEffect(() => {
     getUser(match.params.login);
     getUserRepos(match.params.login);
@@ -20,8 +21,8 @@ const User = ({ getUser, getUserRepos, loading, repos, user, match }) => {
       {user.hireable ? (
         <i className="fas fa-check text-success"></i>
       ) : (
-        <i className="fas fa-times-circle text-danger"></i>
-      )}
+          <i className="fas fa-times-circle text-danger"></i>
+        )}
       <div className="card grid-2">
         <div className="all-center">
           <img
@@ -46,45 +47,27 @@ const User = ({ getUser, getUserRepos, loading, repos, user, match }) => {
           </a>
 
           <ul>
-            <li>
-              <strong> Username: </strong> {user.login}
-            </li>
+            <li> <strong> Username: </strong> {user.login} </li>
 
             {user.company && (
-              <li>
-                <strong> Company: </strong> {user.company}
-              </li>
+              <li>   <strong> Company: </strong> {user.company} </li>
             )}
 
             {user.blog && (
-              <li>
-                <strong> Website: </strong> <a href={user.blog}> {user.blog}</a>
-              </li>
+              <li>   <strong> Website: </strong> <a href={user.blog}> {user.blog}</a></li>
             )}
           </ul>
         </div>
       </div>
+
       <div className="card text-center">
         <div className="badge badge-primary">Following: {user.following}</div>
         <div className="badge badge-dark"> Followers: {user.followers} </div>
-        <div className="badge badge-success">
-          Public Repos: {user.public_repos}
-        </div>
-        <div className="badge badge-light">
-          Public Gists: {user.public_gists}
-        </div>
+        <div className="badge badge-success"> Public Repos: {user.public_repos}</div>
+        <div className="badge badge-light"> Public Gists: {user.public_gists}</div>
       </div>
       <Repos repos={repos} />
     </div>
   );
 };
-
-User.propTypes = {
-  getUser: PropTypes.func.isRequired,
-  user: PropTypes.object,
-  repos: PropTypes.array.isRequired,
-  getUserRepos: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
-};
-
 export default User;
