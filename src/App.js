@@ -49,7 +49,6 @@ class App extends React.Component {
     const res = await Axios.get(
       `https://api.github.com/users/${username}/repos?sort=updated&type=all&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
     );
-    console.log(res);
     this.setState({ loading: false, repos: res.data });
   };
 
